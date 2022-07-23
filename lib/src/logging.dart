@@ -41,9 +41,7 @@ StringBuffer colorLog(LogRecord record, {bool verbose}) {
   }
   final level = color.wrap('[${record.level}]');
   final eraseLine = ansiOutputEnabled && !verbose ? '\x1b[2K\r' : '';
-  final lines = <Object>[
-    '$eraseLine$level ${_loggerName(record, verbose)}${record.message}'
-  ];
+  final lines = <Object>['$eraseLine$level ${_loggerName(record, verbose)}${record.message}'];
 
   if (record.error != null) {
     lines.add(record.error);
@@ -130,15 +128,12 @@ T logTimedSync<T>(
   return result;
 }
 
-Function(LogRecord) stdIOLogListener({bool verbose}) =>
-    (record) => io.stdout.write(colorLog(record, verbose: verbose));
+Function(LogRecord) stdIOLogListener({bool verbose}) => (record) => io.stdout.write(colorLog(record, verbose: verbose));
 
 String _loggerName(LogRecord record, bool verbose) {
   final knownNames = const [
     'Proxy',
   ];
   final maybeSplit = record.level >= Level.WARNING ? '\n' : '';
-  return verbose || !knownNames.contains(record.loggerName)
-      ? '${record.loggerName}:$maybeSplit'
-      : '';
+  return verbose || !knownNames.contains(record.loggerName) ? '${record.loggerName}:$maybeSplit' : '';
 }

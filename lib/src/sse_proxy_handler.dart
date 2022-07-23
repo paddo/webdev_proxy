@@ -48,10 +48,8 @@ class SseProxyHandler {
 
   shelf.Handler get handler => _handle;
 
-  Future<shelf.Response> _createSseConnection(
-      shelf.Request req, String path) async {
-    final serverReq = http.StreamedRequest(
-        req.method, _serverUri.replace(query: req.requestedUri.query))
+  Future<shelf.Response> _createSseConnection(shelf.Request req, String path) async {
+    final serverReq = http.StreamedRequest(req.method, _serverUri.replace(query: req.requestedUri.query))
       ..followRedirects = false
       ..headers.addAll(req.headers)
       ..headers['Host'] = _serverUri.authority
@@ -60,14 +58,12 @@ class SseProxyHandler {
     final serverResponse = await _httpClient.send(serverReq);
 
     req.hijack((channel) {
-      final sink = utf8.encoder.startChunkedConversion(channel.sink)
-        ..add(_sseHeaders(req.headers['origin']));
+      final sink = utf8.encoder.startChunkedConversion(channel.sink)..add(_sseHeaders(req.headers['origin']));
 
       StreamSubscription serverSseSub;
       StreamSubscription reqChannelSub;
 
-      serverSseSub =
-          utf8.decoder.bind(serverResponse.stream).listen(sink.add, onDone: () {
+      serverSseSub = utf8.decoder.bind(serverResponse.stream).listen(sink.add, onDone: () {
         reqChannelSub?.cancel();
         sink.close();
       });

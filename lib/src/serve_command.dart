@@ -36,19 +36,15 @@ class ServeCommand extends Command<int> {
   static const rewrite404sFlag = 'rewrite-404s';
 
   ServeCommand() {
-    argParser.addFlag(rewrite404sFlag,
-        defaultsTo: true,
-        help: 'Rewrite every request that returns a 404 to /index.html');
+    argParser.addFlag(rewrite404sFlag, defaultsTo: true, help: 'Rewrite every request that returns a 404 to /index.html');
   }
 
   @override
-  String get description =>
-      'Run `webdev serve` (a local web development server) behind a proxy that '
+  String get description => 'Run `webdev serve` (a local web development server) behind a proxy that '
       'supports HTML5 routing by rewriting not-found requests to index.html.';
 
   @override
-  String get invocation =>
-      '${super.invocation.replaceFirst(' [arguments]', '')} '
+  String get invocation => '${super.invocation.replaceFirst(' [arguments]', '')} '
       '[-- [webdev serve arguments]]';
 
   @override
@@ -59,8 +55,7 @@ class ServeCommand extends Command<int> {
 
   bool get _canUseWebdev => !_missingWebdev && _hasCompatibleWebdev;
 
-  bool get _hasCompatibleWebdev =>
-      webdevCompatibility.allows(getGlobalWebdevVersion());
+  bool get _hasCompatibleWebdev => webdevCompatibility.allows(getGlobalWebdevVersion());
 
   bool get _missingWebdev => getGlobalWebdevVersion() == null;
 
@@ -83,14 +78,14 @@ class ServeCommand extends Command<int> {
       return red.wrap(
         'This command requires that `webdev` be activated globally.\n'
         'Please run the following:\n'
-        '\tpub global activate webdev "$webdevCompatibility"',
+        '\tdart pub global activate webdev "$webdevCompatibility"',
       );
     } else if (!_hasCompatibleWebdev) {
       return red.wrap(
         'This command is only compatible with `webdev $webdevCompatibility`, '
         'but you currently have webdev ${getGlobalWebdevVersion()} active.\n'
         'Please run the following to activate a compatible version:\n'
-        '\tpub global activate webdev "$webdevCompatibility"',
+        '\tdart pub global activate webdev "$webdevCompatibility"',
       );
     }
     return null;
@@ -146,16 +141,13 @@ class ServeCommand extends Command<int> {
     final portsToServeByDir = parseDirectoryArgs(argResults.rest);
 
     // Find open ports for each of the directories to be served by webdev.
-    final portsToProxyByDir = {
-      for (final dir in portsToServeByDir.keys) dir: await findUnusedPort()
-    };
+    final portsToProxyByDir = {for (final dir in portsToServeByDir.keys) dir: await findUnusedPort()};
 
     // Start the underlying `webdev serve` process.
     webdevServer = await WebdevServer.start([
       if (hostname != 'localhost') '--hostname=$hostname',
       ...remainingArgs,
-      for (final dir in portsToServeByDir.keys)
-        '$dir:${portsToProxyByDir[dir]}',
+      for (final dir in portsToServeByDir.keys) '$dir:${portsToProxyByDir[dir]}',
     ]);
 
     // Stop proxies and exit if webdev exits.
@@ -178,10 +170,7 @@ class ServeCommand extends Command<int> {
         ));
       } catch (e, stackTrace) {
         proxiesFailed = true;
-        log.severe(
-            'Failed to start proxy server on port ${portsToServeByDir[dir]}',
-            e,
-            stackTrace);
+        log.severe('Failed to start proxy server on port ${portsToServeByDir[dir]}', e, stackTrace);
         shutDown(ExitCode.unavailable.code);
         break;
       }

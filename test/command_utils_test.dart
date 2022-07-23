@@ -31,23 +31,20 @@ void main() {
     group('does not report usage exception if', () {
       test('if rest args are empty', () {
         final argResults = argParser.parse(['command']);
-        assertNoPositionalArgsBeforeSeparator(
-            'serve', argResults.command, usageException);
+        assertNoPositionalArgsBeforeSeparator('serve', argResults.command, usageException);
         expect(capturedUsageException, isNull);
       });
 
       test('if expected flag is parsed', () {
         argParser.addFlag('flag');
         final argResults = argParser.parse(['command', '--flag']);
-        assertNoPositionalArgsBeforeSeparator(
-            'serve', argResults.command, usageException);
+        assertNoPositionalArgsBeforeSeparator('serve', argResults.command, usageException);
         expect(capturedUsageException, isNull);
       });
 
       test('if args are only passed after -- separator', () {
         final argResults = argParser.parse(['command', '--', 'after']);
-        assertNoPositionalArgsBeforeSeparator(
-            'serve', argResults.command, usageException);
+        assertNoPositionalArgsBeforeSeparator('serve', argResults.command, usageException);
         expect(capturedUsageException, isNull);
       });
     });
@@ -55,16 +52,13 @@ void main() {
     group('reports usage exception if', () {
       test('-- separator is missing before webdev args', () {
         final argResults = argParser.parse(['command', 'foo']);
-        assertNoPositionalArgsBeforeSeparator(
-            'serve', argResults.command, usageException);
+        assertNoPositionalArgsBeforeSeparator('serve', argResults.command, usageException);
         expect(capturedUsageException, isNotNull);
       });
 
       test('positional args exist before -- separator', () {
-        final argResults =
-            argParser.parse(['command', 'before', '--', 'after']);
-        assertNoPositionalArgsBeforeSeparator(
-            'serve', argResults.command, usageException);
+        final argResults = argParser.parse(['command', 'before', '--', 'after']);
+        assertNoPositionalArgsBeforeSeparator('serve', argResults.command, usageException);
         expect(capturedUsageException, isNotNull);
       });
     });

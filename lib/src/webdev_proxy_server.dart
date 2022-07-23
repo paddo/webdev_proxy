@@ -65,11 +65,8 @@ class WebdevProxyServer {
     final serverSseUri = serverUri.replace(path: r'/$sseHandler');
     final sseUri = Uri.parse(r'/$sseHandler');
 
-    final proxyHandler =
-        shelf_proxy.proxyHandler(serverUri, proxyName: 'webdev_proxy');
-    var cascade = shelf.Cascade()
-        .add(SseProxyHandler(sseUri, serverSseUri).handler)
-        .add(proxyHandler);
+    final proxyHandler = shelf_proxy.proxyHandler(serverUri, proxyName: 'webdev_proxy');
+    var cascade = shelf.Cascade().add(SseProxyHandler(sseUri, serverSseUri).handler).add(proxyHandler);
     if (rewrite404s) {
       cascade = cascade.add(proxyRootIndexHandler(proxyHandler));
     }

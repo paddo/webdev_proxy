@@ -37,14 +37,11 @@ void main() {
   });
 
   setUp(() async {
-    final staticWebHandler = createStaticHandler('test/web',
-        listDirectories: true, defaultDocument: 'index.html');
+    final staticWebHandler = createStaticHandler('test/web', listDirectories: true, defaultDocument: 'index.html');
 
     serverSse = SseHandler(Uri.parse(r'/$sseHandler'));
-    final serverCascade =
-        shelf.Cascade().add(serverSse.handler).add(staticWebHandler);
-    server = await shelf_io.serve(
-        serverCascade.handler, 'localhost', await findUnusedPort());
+    final serverCascade = shelf.Cascade().add(serverSse.handler).add(staticWebHandler);
+    server = await shelf_io.serve(serverCascade.handler, 'localhost', await findUnusedPort());
   });
 
   tearDown(() async {
@@ -59,8 +56,7 @@ void main() {
       portToProxy: server.port,
     );
 
-    final response =
-        await http.get('http://localhost:${proxy.port}/index.dart');
+    final response = await http.get('http://localhost:${proxy.port}/index.dart');
     expect(response.statusCode, 200);
     expect(response.body, isNotEmpty);
   });
@@ -87,8 +83,7 @@ void main() {
       rewrite404s: true,
     );
 
-    final response =
-        await http.get('http://localhost:${proxy.port}/path/to/nothing');
+    final response = await http.get('http://localhost:${proxy.port}/path/to/nothing');
     expect(response.statusCode, 200);
     expect(response.body, startsWith('<!DOCTYPE html>'));
   });
@@ -101,8 +96,7 @@ void main() {
       rewrite404s: false,
     );
 
-    final response =
-        await http.get('http://localhost:${proxy.port}/path/to/nothing');
+    final response = await http.get('http://localhost:${proxy.port}/path/to/nothing');
     expect(response.statusCode, 404);
   });
 }

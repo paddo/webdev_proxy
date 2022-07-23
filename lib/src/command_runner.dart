@@ -23,9 +23,7 @@ import 'package:webdev_proxy/src/serve_command.dart';
 class WebdevProxy extends CommandRunner<int> {
   static const verboseFlag = 'verbose';
 
-  WebdevProxy()
-      : super('webdev_proxy',
-            'A simple dart proxy for `webdev serve` (uses the `shelf_proxy` package).') {
+  WebdevProxy() : super('webdev_proxy', 'A simple dart proxy for `webdev serve` (uses the `shelf_proxy` package).') {
     addCommand(ServeCommand());
     argParser.addFlag(verboseFlag, abbr: 'v', help: 'Enable verbose output.');
   }

@@ -27,22 +27,15 @@ void main() {
   setUp(() async {
     const ssePath = r'/$sseHandler';
 
-    final staticWebHandler = createStaticHandler('test/web',
-        listDirectories: true, defaultDocument: 'index.html');
+    final staticWebHandler = createStaticHandler('test/web', listDirectories: true, defaultDocument: 'index.html');
 
     serverSse = SseHandler(Uri.parse(ssePath));
     final serverCascade = shelf.Cascade().add(serverSse.handler);
-    server = await io.serve(
-        serverCascade.handler, 'localhost', await findUnusedPort());
+    server = await io.serve(serverCascade.handler, 'localhost', await findUnusedPort());
 
-    final proxySse = SseProxyHandler(Uri.parse(ssePath),
-        Uri.parse('http://localhost:${server.port}$ssePath'));
-    final proxyCascade = shelf.Cascade()
-        .add(proxySse.handler)
-        .add(_faviconHandler)
-        .add(staticWebHandler);
-    proxy = await io.serve(
-        proxyCascade.handler, 'localhost', await findUnusedPort());
+    final proxySse = SseProxyHandler(Uri.parse(ssePath), Uri.parse('http://localhost:${server.port}$ssePath'));
+    final proxyCascade = shelf.Cascade().add(proxySse.handler).add(_faviconHandler).add(staticWebHandler);
+    proxy = await io.serve(proxyCascade.handler, 'localhost', await findUnusedPort());
 
     webdriver = await createWebDriver();
   });

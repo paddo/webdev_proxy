@@ -23,12 +23,8 @@ import 'package:shelf_proxy/shelf_proxy.dart' as shelf_proxy;
 /// that is identical except that its URI's path is `/`.
 shelf.Handler proxyRootIndexHandler(shelf.Handler proxyHandler) {
   return (shelf.Request req) {
-    final indexRequest = shelf.Request(
-        'GET', req.requestedUri.replace(path: '/'),
-        context: req.context,
-        encoding: req.encoding,
-        headers: req.headers,
-        protocolVersion: req.protocolVersion);
+    final indexRequest = shelf.Request('GET', req.requestedUri.replace(path: '/'),
+        context: req.context, encoding: req.encoding, headers: req.headers, protocolVersion: req.protocolVersion);
     return proxyHandler(indexRequest);
   };
 }

@@ -32,8 +32,7 @@ void main() {
     });
 
     test('multiple distinct mappings', () {
-      expect(parseDirectoryArgs(['web:8080', 'test:8081']),
-          {'web': 8080, 'test': 8081});
+      expect(parseDirectoryArgs(['web:8080', 'test:8081']), {'web': 8080, 'test': 8081});
     });
 
     test('last one wins when dir has multiple ports', () {
@@ -45,8 +44,7 @@ void main() {
     });
 
     test('nested directory', () {
-      expect(parseDirectoryArgs(['web/nested/dir/:9000']),
-          {'web/nested/dir/': 9000});
+      expect(parseDirectoryArgs(['web/nested/dir/:9000']), {'web/nested/dir/': 9000});
     });
   });
 
